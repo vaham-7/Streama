@@ -38,6 +38,7 @@ angular.module('streama').directive('streamaVideoPlayer', [
         $scope.play = play;
         $scope.pause = pause;
         $scope.skip = skip;
+        $scope.pip = pip;
         $scope.closeVideo = closeVideo;
         $scope.clickVideo = clickVideo;
         $scope.fullScreen = toggleFullScreen;
@@ -259,6 +260,9 @@ angular.module('streama').directive('streamaVideoPlayer', [
           $scope.$on('triggerVideoPause', function (e, data) {
             $scope.pause(data);
           });
+          $scope.$on('triggerVideoPip', function (e) {
+            $scope.pip();
+          })
           $scope.$on('triggerVideoToggle', function (e, data) {
             if ($scope.playing) {
               $scope.pause(data);
@@ -378,6 +382,41 @@ angular.module('streama').directive('streamaVideoPlayer', [
           $scope.playing = true;
           $scope.options.onPlay(video, socketData);
           $scope.overlayVisible = false;
+        }
+
+        function pip() {
+          // const togglePipButton = document.getElementById("togglePipButton");
+
+          // // Hide button if Picture-in-Picture is not supported or disabled.
+          // togglePipButton.hidden =
+          //   !document.pictureInPictureEnabled || video.disablePictureInPicture;
+
+          // togglePipButton.addEventListener("click", async () => {
+          //   // If there is no element in Picture-in-Picture yet, let’s request
+          //   // Picture-in-Picture for the video, otherwise leave it.
+          //   try {
+          //     if (document.pictureInPictureElement) {
+          //       await document.exitPictureInPicture();
+          //     } else {
+          //       await video.requestPictureInPicture();
+          //     }
+          //   } catch (err) {
+          //     // Video failed to enter/leave Picture-in-Picture mode.
+          // }});
+          //console.log("We are here in my code!");
+            try {
+              if (document.pictureInPictureElement) {
+                document.exitPictureInPicture();
+              } else {
+                video.requestPictureInPicture();
+              }
+            } catch (err) {
+              // Video failed to enter/leave Picture-in-Picture mode.
+              //$console.log("error");
+            }
+          // video.pause();
+          // $scope.playing = false;
+          // $scope.options.onPause(video, socketData);
         }
 
         function createNewPlayerSession() {
